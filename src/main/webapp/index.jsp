@@ -215,27 +215,27 @@
 
     <div class="main-workspace">
         <div class="section-tasks"> 
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>¿Qué es SonarQube Cloud?</span>
             </div>
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>Cómo conectar un repositorio de GitHub a SonarQube Cloud</span>
             </div>
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>Generar token de Sonar</span>
             </div>
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>Configurar secretos de GitHub</span>
             </div>
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>Crear flujo de trabajo YAML para GitHub Actions</span>
             </div>
-            <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-item" onclick="toggleTask(this, event)">
                 <input type="checkbox" onchange="updateProgress()">
                 <span>Ejecutar análisis estático automatizado de código</span>
             </div>
@@ -281,9 +281,10 @@
 </div>
 
 <script>
-    function toggleTask(element) {
+    // Recibe explícitamente el parámetro 'evt' para evitar variables globales huérfanas
+    function toggleTask(element, evt) {
         const checkbox = element.querySelector('input[type="checkbox"]');
-        if (event.target !== checkbox) {
+        if (evt.target !== checkbox) {
             checkbox.checked = !checkbox.checked;
             updateProgress();
         }
