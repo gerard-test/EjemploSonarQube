@@ -25,7 +25,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--card-bg);
             padding: 40px;
@@ -50,7 +50,7 @@
             gap: 10px;
         }
 
-        /* Barra de Progreso */
+        /* Barra de Progreso Interactiva */
         .progress-container {
             background: #eee;
             border-radius: 8px;
@@ -67,32 +67,18 @@
             transition: width 0.4s ease;
         }
 
-        /* Bloque principal: Tareas + Imagen */
-        .main-workspace {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 30px;
-            align-items: start;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 850px) {
-            .main-workspace { grid-template-columns: 1fr; }
-        }
-
+        /* Lista de verificación interactiva */
         .section-tasks { 
             background: var(--primary-light);
             padding: 20px 25px;
             border-radius: 8px;
             border-left: 5px solid var(--primary);
-            height: 100%;
-            box-sizing: border-box;
         }
 
         .task-item {
             display: flex;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(0,86,179,0.1);
             cursor: pointer;
             transition: transform 0.2s ease;
@@ -115,7 +101,7 @@
         }
 
         .task-item span {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             transition: color 0.3s ease, text-decoration 0.3s ease;
         }
 
@@ -124,35 +110,7 @@
             text-decoration: line-through;
         }
 
-        /* Contenedor de la Imagen del Dashboard */
-        .mockup-container {
-            background: #ffffff;
-            border: 2px dashed #cbd5e1;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-
-        .mockup-container h3 {
-            margin-top: 0;
-            font-size: 1rem;
-            color: #64748b;
-        }
-
-        .mockup-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease;
-        }
-
-        .mockup-img:hover {
-            transform: scale(1.03);
-        }
-
-        /* Cuadrícula de Información Inferior */
+        /* Estilos de las secciones informativas */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -207,43 +165,36 @@
 <div class="container">
     <h1>🚀 Pipeline CI/CD: DevOps & DevSecOps</h1>
     
-    <p>Haz clic en cada objetivo de la guía para medir tu progreso en la integración y visualizar el avance:</p>
+    <p>Haz clic en cada objetivo de la guía para medir tu progreso en la integración de calidad de código:</p>
     
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <div class="main-workspace">
-        <div class="section-tasks"> 
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>¿Qué es SonarQube Cloud?</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Cómo conectar un repositorio de GitHub a SonarQube Cloud</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Generar token de Sonar</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Configurar secretos de GitHub</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Crear flujo de trabajo YAML para GitHub Actions</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this, event)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Ejecutar análisis estático automatizado de código</span>
-            </div>
+    <div class="section-tasks"> 
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>¿Qué es SonarQube Cloud?</span>
         </div>
-
-        <div class="mockup-container">
-            <h3>📊 Flujo de Trabajo (Workflow) Completo de Integración Continua (CI)</h3>
-            <img src="assets/dashboard-mockup.png" alt="SonarQube Dashboard Mockup" class="mockup-img">
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Cómo conectar un repositorio de GitHub a SonarQube Cloud</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Generar token de Sonar</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Configurar secretos de GitHub</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Crear flujo de trabajo YAML para GitHub Actions</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Ejecutar análisis estático automatizado de código</span>
         </div>
     </div>
 
@@ -281,15 +232,16 @@
 </div>
 
 <script>
-    // Recibe explícitamente el parámetro 'evt' para evitar variables globales huérfanas
-    function toggleTask(element, evt) {
+    // Permite marcar la casilla haciendo clic en cualquier parte de la fila
+    function toggleTask(element) {
         const checkbox = element.querySelector('input[type="checkbox"]');
-        if (evt.target !== checkbox) {
+        if (event.target !== checkbox) {
             checkbox.checked = !checkbox.checked;
             updateProgress();
         }
     }
 
+    // Calcula el porcentaje completado y actualiza la barra
     function updateProgress() {
         const checkboxes = document.querySelectorAll('.task-item input[type="checkbox"]');
         const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
@@ -304,3 +256,4 @@
 
 </body>
 </html>
+
