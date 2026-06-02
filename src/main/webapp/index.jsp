@@ -5,8 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard DevSecOps: SonarQube Cloud</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -16,9 +24,9 @@
             --border-color: #222f43;
             --text-title: #ffffff;
             --text-body: #94a3b8;
-            --primary: #38bdf8;       /* Celeste Cyber */
-            --accent: #a855f7;        /* Púrpura DevSecOps */
-            --success: #34d399;       /* Verde Pipeline */
+            --primary: #38bdf8;
+            --accent: #a855f7;
+            --success: #34d399;
             --code-bg: #070a12;
         }
 
@@ -41,7 +49,6 @@
             margin: 0 auto;
         }
 
-        /* Header con estética de Dashboard */
         header {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 25px;
@@ -79,7 +86,6 @@
             gap: 8px;
         }
 
-        /* Progreso del Pipeline interactivo */
         .progress-container {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -110,7 +116,6 @@
             transition: width 0.4s ease;
         }
 
-        /* Layout Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 7fr 4fr;
@@ -123,7 +128,6 @@
             }
         }
 
-        /* Tarjetas Estilo Cyber */
         .panel {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -146,7 +150,6 @@
             gap: 10px;
         }
 
-        /* Lista de Pasos con Checkbox Oculto pero Funcional */
         .interactive-list {
             display: flex;
             flex-direction: column;
@@ -210,7 +213,6 @@
             transition: color 0.2s ease;
         }
 
-        /* Listas e Íconos */
         .panel-list {
             list-style: none;
         }
@@ -226,7 +228,6 @@
             margin-top: 5px;
         }
 
-        /* Sección de código simulada */
         .code-snippet {
             font-family: 'JetBrains Mono', monospace;
             background-color: var(--code-bg);
@@ -238,11 +239,9 @@
             overflow-x: auto;
         }
 
-        .code-comment { color: #64748b; }
         .code-keyword { color: var(--accent); }
         .code-string { color: var(--success); }
 
-        /* Tech Badges */
         .tech-tags {
             display: flex;
             flex-wrap: wrap;
@@ -272,7 +271,7 @@
                 <p style="margin-top: 5px;">Automatización de Análisis Estático de Código (SAST)</p>
             </div>
             <div class="status-badge">
-                <i class="fa-solid fa-circle-dot animate-pulse"></i> Pipeline Activo
+                <i class="fa-solid fa-circle-dot"></i> Pipeline Activo
             </div>
         </header>
 
@@ -384,3 +383,24 @@
 
         </div>
     </div>
+
+    <script>
+        const checkboxes = document.querySelectorAll('.pipeline-checkbox');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        function updateProgress() {
+            const total = checkboxes.length;
+            const checked = document.querySelectorAll('.pipeline-checkbox:checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            progressBar.style.width = `${percentage}%`;
+            progressPercentage.innerText = `${percentage}%`;
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+    </script>
+</body>
+</html>
