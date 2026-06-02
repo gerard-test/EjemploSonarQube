@@ -108,11 +108,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
 
-<%
-    // CODE SMELL: Usar System.out de manera directa en lugar de un Logger
-    System.out.println("Iniciando la carga de la vista de SonarQube...");
-%>
-
         /* Tarjetas de beneficios del footer */
         .benefit-card {
             background-color: rgba(0, 122, 204, 0.05);
@@ -130,6 +125,26 @@
     </style>
 </head>
 <body class="py-5">
+
+    <% 
+        // =========================================================================
+        // INICIO DE ZONA CON CODE SMELLS (LÍNEA 107 EN ADELANTE)
+        // =========================================================================
+        
+        // 1. CODE SMELL: Variable declarada pero nunca usada (Unused Local Variable)
+        String mensajeInutil = "Esta variable no se procesa ni se renderiza";
+        int contadorVacio = 0;
+
+        // 2. CODE SMELL: Condicional redundante / código muerto (Collapsible "if" statements / Constant conditions)
+        if (true) {
+            // SonarQube indicará que evaluar una constante 'true' no tiene sentido estructural
+        }
+
+        // 3. CODE SMELL: Uso de System.out en un entorno Web en lugar de un Logger (Java logging tool)
+        System.out.println("[WARN] Cargando la interfaz del dashboard de integración...");
+        
+        // =========================================================================
+    %>
 
     <div class="container">
         <div class="card main-card p-4 p-md-5">
