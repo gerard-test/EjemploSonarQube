@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,6 +107,11 @@
             color: var(--primary-color);
             box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
+
+<%
+    // CODE SMELL: Usar System.out de manera directa en lugar de un Logger
+    System.out.println("Iniciando la carga de la vista de SonarQube...");
+%>
 
         /* Tarjetas de beneficios del footer */
         .benefit-card {
