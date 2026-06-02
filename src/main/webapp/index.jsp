@@ -4,34 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía de Integración SonarQube Cloud</title>
+    <title>Análisis Estático de Calidad de Código Automatizado</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-color: #f0f4f9;
+            --bg-gradient: linear-gradient(135deg, #f0f4f9 0%, #e2ecf7 100%);
             --primary-color: #0b2545;
             --accent-blue: #007acc;
-            --accent-purple: #6f42c1;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --neon-shadow: 0 10px 30px rgba(0, 122, 204, 0.08);
         }
 
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-gradient);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
         }
 
-        /* Contenedor principal estilo tarjeta holográfica de la imagen */
+        /* Contenedor Principal Estilo Holográfico */
         .main-card {
-            background: linear-gradient(145deg, #ffffff, #e6eef8);
-            border-radius: 24px;
-            border: none;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(145deg, #ffffff, #f4f8fc);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(11, 37, 69, 0.06);
+            backdrop-filter: blur(10px);
         }
 
-        /* Títulos e Identidad Visual */
         .main-title {
             color: var(--primary-color);
             font-weight: 800;
@@ -40,228 +41,267 @@
         }
 
         .subtitle {
-            color: var(--accent-blue);
-            font-weight: 700;
-            letter-spacing: 1px;
+            color: #506680;
+            font-weight: 600;
+            letter-spacing: 1.5px;
         }
 
-        /* Tarjetas de pasos (01, 02, 03) */
-        .step-card {
+        /* Bloques de Pasos Superiores (01, 02, 03) */
+        .step-box {
             background-color: #ffffff;
-            border: 1px solid rgba(0, 122, 204, 0.15);
+            border: 1px solid rgba(226, 236, 247, 0.8);
             border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .step-card:hover {
+        .step-box:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.08);
         }
 
-        .step-number {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--accent-blue);
-        }
-
-        .step-badge {
-            font-size: 0.75rem;
+        .step-header {
+            font-size: 0.8rem;
             font-weight: 700;
-            text-transform: uppercase;
-            color: #6c757d;
+            color: #7a8b9e;
         }
 
-        /* Panel de Resumen Ejecutivo (KPI Lateral) */
-        .kpi-panel {
-            background-color: var(--primary-color);
-            border-radius: 16px;
-            color: #ffffff;
+        .step-num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #384d66;
+        }
+
+        /* Panel de Resumen Ejecutivo de la Derecha */
+        .kpi-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .kpi-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-blue);
         }
 
         .kpi-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #cbd5e1;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .kpi-label {
             font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #94a3b8;
-        }
-
-        /* Nodo de flujo horizontal */
-        .pipeline-container {
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 16px;
-        }
-
-        .pipeline-node {
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 10px;
             font-weight: 700;
-            font-size: 0.85rem;
-            color: var(--primary-color);
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        /* Contenedor e Imagen del Flujo Central */
+        .display-mockup {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(0, 122, 204, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .display-mockup:hover {
+            transform: scale(1.01);
+        }
+
+        /* Nodo de flujo horizontal inferior */
+        .pipeline-wrapper {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            border: 1px solid rgba(226, 236, 247, 0.5);
+        }
+
+        .pipeline-step {
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #334155;
             box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
 
-        /* Tarjetas de beneficios del footer */
-        .benefit-card {
-            background-color: rgba(0, 122, 204, 0.05);
-            border: 1px solid rgba(0, 122, 204, 0.1);
-            border-radius: 12px;
+        /* Beneficios del Footer (Los 5 bloques de abajo) */
+        .feature-badge {
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 122, 204, 0.08);
+            border-radius: 14px;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            transition: background-color 0.2s;
+            font-size: 0.8rem;
+            color: #1e293b;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+            transition: all 0.2s ease;
         }
 
-        .benefit-card:hover {
-            background-color: rgba(0, 122, 204, 0.1);
-        }
-
-        /* Estilo personalizado para la maqueta integrada */
-        .mockup-img {
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            transition: opacity 0.3s;
-        }
-        .mockup-img:hover {
-            opacity: 0.95;
+        .feature-badge:hover {
+            background-color: #f1f5f9;
+            border-color: var(--accent-blue);
         }
     </style>
 </head>
-<body class="py-5">
+<body class="py-4 py-md-5">
 
     <div class="container">
-        <div class="card main-card p-4 p-md-5">
+        <div class="card main-card p-4 p-lg-5">
             
-            <header class="mb-5">
-                <h1 class="display-5 main-title text-uppercase mb-2">
+            <header class="mb-4">
+                <h1 class="display-6 main-title text-uppercase mb-2">
                     Análisis Estático de Calidad<br>
                     de Código Automatizado<br>
                     con GitHub Actions
                 </h1>
-                <p class="subtitle text-uppercase m-0">Integrando SonarQube Cloud</p>
+                <p class="subtitle text-uppercase small m-0">Integrando SonarQube Cloud</p>
             </header>
 
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-4">
                 
-                <div class="col-lg-8">
-                    <div class="row g-3">
+                <div class="col-xl-8 col-lg-7">
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="step-box p-3 h-100 d-flex flex-column justify-content-between">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="step-num">01.</span>
+                                    <span class="badge bg-light text-primary step-header text-uppercase">Disparador de Commit</span>
+                                </div>
+                                <div class="small text-muted"><i class="fa-solid fa-code-commit text-accent me-2"></i>commits 0,00.00s</div>
+                            </div>
+                        </div>
                         
                         <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">01.</span>
-                                    <span class="step-badge">Disparador</span>
+                            <div class="step-box p-3 h-100 d-flex flex-column justify-content-between">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="step-num">02.</span>
+                                    <span class="badge bg-light text-primary step-header text-uppercase">Flujo de Trabajo CI/CD</span>
                                 </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>¿Qué es SonarQube Cloud?</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Conectar repositorio</li>
-                                </ul>
+                                <div class="small text-muted"><i class="fa-solid fa-arrows-spin text-accent me-2"></i>GitHub Actions Pipeline</div>
                             </div>
                         </div>
-
+                        
                         <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">02.</span>
-                                    <span class="step-badge">Flujo CI/CD</span>
+                            <div class="step-box p-3 h-100 d-flex flex-column justify-content-between">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="step-num">03.</span>
+                                    <span class="badge bg-light text-primary step-header text-uppercase">Escaneo Sonar</span>
                                 </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Generar token Sonar</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Configurar secretos</li>
-                                </ul>
+                                <div class="small text-muted"><i class="fa-solid fa-cloud-sun text-accent me-2"></i>sonarqube cloud</div>
                             </div>
                         </div>
-
-                        <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">03.</span>
-                                    <span class="step-badge">Escaneo</span>
-                                </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Crear YAML Actions</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Ejecutar análisis</li>
-                                </ul>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="text-center p-2 bg-white rounded-4 border border-light shadow-sm">
+                        <img src="assets/dashboard-mockup.png" alt="Esquema de Análisis Automatizado" class="display-mockup">
+                    </div>
+
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="kpi-panel p-4 h-100 d-flex flex-column justify-content-between">
+                <div class="col-xl-4 col-lg-5">
+                    <div class="kpi-container p-4 h-100 d-flex flex-column justify-content-between">
                         <div>
-                            <h3 class="kpi-title pb-2 mb-3">Resumen Ejecutivo</h3>
-                            
-                            <div class="text-center mb-4">
-                                <img src="assets/dashboard-mockup.png" alt="Esquema del Flujo Automatizado" class="img-fluid rounded-3 mockup-img">
+                            <div class="d-flex align-items-center justify-content-between pb-2 mb-3 border-bottom">
+                                <h3 class="h6 text-uppercase fw-bold m-0 text-secondary"><i class="fa-solid fa-chart-pie me-2 text-primary"></i>Resumen Ejecutivo</h3>
+                                <i class="fa-solid fa-brain text-info fs-5"></i>
                             </div>
                             
-                            <div class="mb-3">
-                                <span class="kpi-label d-block mb-1">Herramientas Clave</span>
-                                <div class="fw-bold mb-1"><i class="fa-brands fa-github text-info me-2"></i>GitHub Actions</div>
-                                <div class="fw-bold"><i class="fa-solid fa-cloud text-info me-2"></i>SonarQube Cloud</div>
+                            <div class="kpi-card p-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <span class="kpi-title d-block text-uppercase">Tiempo de Análisis <span class="badge bg-light text-muted fw-normal">KPI</span></span>
+                                        <span class="kpi-value">1h 45<span class="fs-6 fw-semibold text-muted">min</span></span>
+                                    </div>
+                                    <i class="fa-solid fa-chart-simple text-primary pt-1"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="kpi-card p-3 mb-3 style-errors" style="border-left-color: #ef4444;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <span class="kpi-title d-block text-uppercase">Conteo de Errores <span class="badge bg-light text-muted fw-normal">KPI</span></span>
+                                        <span class="kpi-value text-danger">206</span>
+                                    </div>
+                                    <i class="fa-solid fa-bug text-danger pt-1"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="kpi-card p-3 mb-3 style-smells" style="border-left-color: #10b981;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <span class="kpi-title d-block text-uppercase">Olores de Código <span class="badge bg-light text-muted fw-normal">KPI</span></span>
+                                        <span class="kpi-value text-success">0</span>
+                                    </div>
+                                    <i class="fa-solid fa-wand-magic-sparkles text-success pt-1"></i>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="mt-3">
-                            <span class="kpi-label d-block mb-1">Stack Soportado</span>
-                            <div class="fw-bold"><i class="fa-solid fa-cube text-warning me-2"></i>Maven / Java</div>
+
+                        <div class="pt-3 border-top bg-light p-3 rounded-3 mt-3">
+                            <span class="text-uppercase text-muted d-block mb-2 style-smells" style="font-size: 0.7rem; font-weight:700;">Tecnología Base</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-bold small text-dark"><i class="fa-solid fa-cube text-warning me-2"></i>Java Web App (pom.xml)</span>
+                                <span class="badge bg-dark">Maven</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="mb-5">
-                <h4 class="h6 text-uppercase fw-bold text-muted mb-3">Flujo del pipeline & Roles de Ingeniería</h4>
-                <div class="pipeline-container p-3">
+            <div class="mb-4">
+                <div class="pipeline-wrapper p-3">
                     <div class="row g-2 align-items-center text-center">
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-users me-2 text-primary"></i>DevSecOps / DevOps</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-brands fa-git-alt me-2 text-danger"></i>Git Repo</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-gears me-2 text-secondary"></i>Maven Build</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-network-wired me-2 text-success"></i>GH Actions</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-square-poll-vertical me-2 text-info"></i>Sonar Report</div></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-solid fa-users text-primary me-1"></i>Equipo Desarrollo</div></div>
+                        <div class="col-auto text-muted small d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-brands fa-git-alt text-danger me-1"></i>Repositorio Git</div></div>
+                        <div class="col-auto text-muted small d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-solid fa-gears text-secondary"></i>Construcción Maven</div></div>
+                        <div class="col-auto text-muted small d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-solid fa-network-wired text-success"></i>GH Actions Workflow</div></div>
+                        <div class="col-auto text-muted small d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-solid fa-shield-halved text-info me-1"></i>Análisis Sonar</div></div>
+                        <div class="col-auto text-muted small d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col"><div class="pipeline-step p-2"><i class="fa-solid fa-square-poll-vertical text-dark me-1"></i>Reporte Final</div></div>
                     </div>
                 </div>
             </div>
 
             <footer>
-                <h2 class="h5 fw-bold mb-3 text-dark"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>¿Por qué es importante esta implementación?</h2>
-                <div class="row g-3">
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-shield-cat-vampire mb-2 text-primary fs-4"></i>
-                            Seguridad Temprana
+                <div class="row g-2 text-center">
+                    <div class="col-md col-6">
+                        <div class="feature-badge p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-magnifying-glass text-primary mb-2 fs-5"></i>
+                            <span>Mayor Calidad de Código</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-robot mb-2 text-primary fs-4"></i>
-                            Calidad Automatizada
+                    <div class="col-md col-6">
+                        <div class="feature-badge p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-gauge-high text-info mb-2 fs-5"></i>
+                            <span>Entrega Más Rápida</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-bolt mb-2 text-primary fs-4"></i>
-                            Prácticas CI/CD
+                    <div class="col-md col-6">
+                        <div class="feature-badge p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-arrow-down-short-wide text-danger mb-2 fs-5"></i>
+                            <span>Deuda Técnica Reducida</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-building-shield mb-2 text-primary fs-4"></i>
-                            DevSecOps Empresarial
+                    <div class="col-md col-6">
+                        <div class="feature-badge p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-clipboard-check text-success mb-2 fs-5"></i>
+                            <span>Cumplimiento Automatizado</span>
+                        </div>
+                    </div>
+                    <div class="col-md col-12">
+                        <div class="feature-badge p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-users-gear text-dark mb-2 fs-5"></i>
+                            <span>Colaboración Mejorada</span>
                         </div>
                     </div>
                 </div>
