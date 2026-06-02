@@ -4,288 +4,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía de Integración SonarQube Cloud | DevOps Portal</title>
-    
-    <script 
-    src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
-    integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxpG6Ckv6pG1P5MNDoAuCEr0aKBslrY"
-    crossorigin="anonymous"></script>
-
-    <script 
-    src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.min.js"
-    integrity="sha384-9ndCyUa6mY5YhDbcQ0O5K3N5QfX1L5h7Q2JkFh2P3z9R4N6A8X2W5F7K8Y9Z1A2"
-    crossorigin="anonymous"></script>
-
-
+    <title>Guía de Integración SonarQube Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b0f19;
+        :root {
+            --bg-color: #f0f4f9;
+            --primary-color: #0b2545;
+            --accent-blue: #007acc;
+            --accent-purple: #6f42c1;
+            --text-dark: #333333;
+            --card-bg: #ffffff;
         }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: linear-gradient(145deg, #ffffff, #e6eef8);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Encabezado Principal */
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .header-section p {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Grid Principal (Izquierda: Pasos, Derecha: KPIs) */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Pasos del Proceso (Estilo 01, 02, 03) */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .step-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .step-number span {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-card p i {
+            color: #28a745;
+            font-size: 0.85rem;
+        }
+
+        /* Panel de Resumen Ejecutivo (KPIs) */
+        .kpi-panel {
+            background: var(--primary-color);
+            color: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(11, 37, 69, 0.2);
+        }
+
+        .kpi-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            color: #cbd5e1;
+        }
+
+        .kpi-item {
+            margin-bottom: 20px;
+        }
+
+        .kpi-item:last-child { margin-bottom: 0; }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .kpi-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kpi-value i {
+            color: #38bdf8;
+        }
+
+        /* Flujo de Trabajo (Pipeline Inferior) */
+        .pipeline-section {
+            margin-bottom: 40px;
+        }
+
+        .pipeline-section h2 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .pipeline-node {
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .pipeline-node i {
+            color: var(--accent-purple);
+        }
+
+        .pipeline-arrow {
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .pipeline { flex-direction: column; align-items: stretch; }
+            .pipeline-arrow { text-align: center; transform: rotate(90deg); margin: 5px 0; }
+        }
+
+        /* Beneficios (Barra Inferior) */
+        .benefits-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .benefit-card {
+            background: rgba(0, 122, 204, 0.06);
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 122, 204, 0.1);
+        }
+
+        .benefit-card i {
+            font-size: 1.3rem;
+            color: var(--accent-blue);
+        }
     </style>
 </head>
-<body class="text-slate-200 min-h-screen flex flex-col antialiased">
+<body>
 
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
-        <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg text-white shadow-lg shadow-blue-500/20">
-                <i data-lucide="shield-check" class="w-6 h-6"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-bold text-white tracking-tight">DevSecOps Portal</h1>
-                <p class="text-xs text-slate-400">Guía de Integración Continua</p>
-            </div>
-        </div>
-        <div class="relative w-full sm:w-64">
-            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchInput" onkeyup="searchFunction()" placeholder="Buscar herramientas o roles..." 
-                   class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors">
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-6xl w-full mx-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class="container">
         
-        <aside class="lg:col-span-1">
-            <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-3 lg:pb-0 border-b lg:border-b-0 border-slate-800">
-                <button onclick="switchTab(event, 'roadmap')" class="tab-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-medium bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-sm transition-all whitespace-nowrap">
-                    <i data-lucide="compass" class="w-4 h-4"></i> Ruta de Aprendizaje
-                </button>
-                <button onclick="switchTab(event, 'audience')" class="tab-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-all whitespace-nowrap">
-                    <i data-lucide="users" class="w-4 h-4"></i> Audiencia Clave
-                </button>
-                <button onclick="switchTab(event, 'stack')" class="tab-btn w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-all whitespace-nowrap">
-                    <i data-lucide="cpu" class="w-4 h-4"></i> Stack Tecnológico
-                </button>
-            </nav>
-        </aside>
+        <div class="header-section">
+            <h1>Análisis Estático de Calidad<br>de Código Automatizado<br>con GitHub Actions</h1>
+            <p>Integrando SonarQube Cloud</p>
+        </div>
 
-        <section class="lg:col-span-3 space-y-8">
+        <div class="main-layout">
             
-            <div id="roadmap" class="tab-content active space-y-6">
-                <div class="border border-slate-800 bg-slate-900/30 rounded-2xl p-6 shadow-xl">
-                    <h2 class="text-xl font-semibold text-white mb-2 flex items-center gap-2">
-                        <span class="w-1 h-5 bg-blue-500 rounded-full inline-block"></span>
-                        SonarQube Cloud Integration Guide
-                    </h2>
-                    <p class="text-sm text-slate-400 mb-6">Sigue este flujo secuencial para automatizar el análisis estático de tu código de forma segura en tus pipelines.</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">¿Qué es SonarQube Cloud?</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Comprensión de la plataforma SaaS para la inspección continua de la calidad del código.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">Vinculación de Repositorios</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Conexión e importación segura de proyectos desde GitHub a SonarQube Cloud.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">Generación de Sonar Token</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Creación de credenciales seguras de autenticación para el escáner.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">Configuración de GitHub Secrets</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Inyección de variables de entorno y tokens cifrados de manera segura.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">Flujo de Trabajo YAML</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Diseño y automatización del pipeline con GitHub Actions.</p>
-                            </div>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 flex gap-3 items-start hover:border-slate-700 transition-colors">
-                            <div class="bg-emerald-500/10 text-emerald-400 p-1.5 rounded-lg shrink-0 mt-0.5">
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-200">Análisis Estático (SAST)</h3>
-                                <p class="text-xs text-slate-400 mt-0.5">Ejecución automatizada de escaneos para detectar Code Smells y Bugs.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 border border-slate-800 rounded-xl overflow-hidden bg-slate-950/40 p-2">
-                        <img src="assets/dashboard-mockup.png" alt="Esquema de Arquitectura CI/CD" class="w-full h-auto rounded-lg opacity-90 hover:opacity-100 transition-opacity">
-                    </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01. <span>Disparador</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> ¿Qué es SonarQube Cloud?</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Conectar repositorio</p>
                 </div>
-
-                <div class="border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 rounded-2xl p-6 shadow-xl">
-                    <h2 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                        <span class="w-1 h-5 bg-amber-500 rounded-full inline-block"></span>
-                        🔐 ¿Por qué es crítico implementar esta arquitectura?
-                    </h2>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-900/50 transition-colors target-search">
-                            <i data-lucide="shield-alert" class="w-5 h-5 text-amber-500 shrink-0"></i>
-                            <span class="text-sm text-slate-300 font-medium">Seguridad desde las primeras etapas del desarrollo (Shift Left Security)</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-900/50 transition-colors target-search">
-                            <i data-lucide="zap" class="w-5 h-5 text-amber-500 shrink-0"></i>
-                            <span class="text-sm text-slate-300 font-medium">Calidad de código y detección de vulnerabilidades 100% automatizada</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-900/50 transition-colors target-search">
-                            <i data-lucide="git-branch" class="w-5 h-5 text-amber-500 shrink-0"></i>
-                            <span class="text-sm text-slate-300 font-medium">Garantía de mejores prácticas en flujos modernos de CI/CD</span>
-                        </div>
-                        <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-900/50 transition-colors target-search">
-                            <i data-lucide="building" class="w-5 h-5 text-amber-500 shrink-0"></i>
-                            <span class="text-sm text-slate-300 font-medium">Implementación estandarizada de DevSecOps a nivel empresarial</span>
-                        </div>
-                    </div>
+                
+                <div class="step-card">
+                    <div class="step-number">02. <span>CI/CD Workflow</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> Generar token Sonar</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Configurar secretos</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">03. <span>Sonar Scan</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> Crear archivo YAML</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Ejecutar análisis</p>
                 </div>
             </div>
 
-            <div id="audience" class="tab-content space-y-6">
-                <div class="border border-slate-800 bg-slate-900/30 rounded-2xl p-6 shadow-xl">
-                    <h2 class="text-xl font-semibold text-white mb-2 flex items-center gap-2">
-                        <span class="w-1 h-5 bg-purple-500 rounded-full inline-block"></span>
-                        Esta integración es fundamental para:
-                    </h2>
-                    <p class="text-sm text-slate-400 mb-6">Roles de ingeniería encargados de velar por la estabilidad, la infraestructura y el gobierno de TI.</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 flex items-center justify-between target-search">
-                            <span class="text-sm font-semibold text-slate-200">Ingenieros de DevOps</span>
-                            <span class="text-xs bg-purple-500/10 text-purple-400 px-2.5 py-1 rounded-full border border-purple-500/20 font-medium">Pipeline Target</span>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 flex items-center justify-between target-search">
-                            <span class="text-sm font-semibold text-slate-200">Ingenieros de DevSecOps</span>
-                            <span class="text-xs bg-red-500/10 text-red-400 px-2.5 py-1 rounded-full border border-red-500/20 font-medium">Security Target</span>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 flex items-center justify-between target-search">
-                            <span class="text-sm font-semibold text-slate-200">Ingenieros de la Nube</span>
-                            <span class="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full border border-blue-500/20 font-medium">Cloud Target</span>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 flex items-center justify-between target-search">
-                            <span class="text-sm font-semibold text-slate-200">Administradores de GitHub Enterprise</span>
-                            <span class="text-xs bg-slate-500/10 text-slate-300 px-2.5 py-1 rounded-full border border-slate-500/20 font-medium">Governance Target</span>
-                        </div>
-                    </div>
+            <div class="kpi-panel">
+                <h3>Resumen Ejecutivo</h3>
+                <div class="kpi-item">
+                    <span class="kpi-label">Herramientas Utilizadas</span>
+                    <span class="kpi-value"><i class="fa-brands fa-github"></i> GitHub Actions</span>
+                    <span class="kpi-value" style="font-size: 1.1rem; margin-top: 5px;"><i class="fa-solid fa-cloud"></i> SonarQube Cloud</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Entorno / Stack</span>
+                    <span class="kpi-value"><i class="fa-solid fa-cube"></i> Maven / Java</span>
                 </div>
             </div>
 
-            <div id="stack" class="tab-content space-y-6">
-                <div class="border border-slate-800 bg-slate-900/30 rounded-2xl p-6 shadow-xl">
-                    <h2 class="text-xl font-semibold text-white mb-2 flex items-center gap-2">
-                        <span class="w-1 h-5 bg-cyan-500 rounded-full inline-block"></span>
-                        Herramientas utilizadas en el Stack
-                    </h2>
-                    <p class="text-sm text-slate-400 mb-6">Componentes técnicos clave requeridos para aprovisionar el entorno de desarrollo y validación.</p>
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 text-center space-y-2 target-search">
-                            <div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mx-auto text-white">
-                                <i data-lucide="github" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-sm font-medium text-slate-300">GitHub</p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 text-center space-y-2 target-search">
-                            <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto text-blue-400">
-                                <i data-lucide="play-circle" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-sm font-medium text-slate-300">GitHub Actions</p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 text-center space-y-2 target-search">
-                            <div class="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center mx-auto text-orange-400">
-                                <i data-lucide="cloud" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-sm font-medium text-slate-300">SonarQube Cloud</p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/50 text-center space-y-2 target-search">
-                            <div class="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center mx-auto text-red-400">
-                                <i data-lucide="code-2" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-sm font-medium text-slate-300">Maven / Java</p>
-                        </div>
-                    </div>
-                </div>
+        </div>
+
+        <div class="pipeline-section">
+            <h2>Flujo de Integración y Roles Clave</h2>
+            <div class="pipeline">
+                <div class="pipeline-node"><i class="fa-solid fa-users"></i> DevOps / DevSecOps</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-brands fa-git-alt"></i> Repositorio Git</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-gears"></i> Construcción (Maven)</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-network-wired"></i> GitHub Actions</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-magnifying-glass-chart"></i> Reporte SonarQube</div>
             </div>
+        </div>
 
-        </section>
-    </main>
+        <h2>🔐 ¿Por qué es importante esta integración?</h2>
+        <div class="benefits-bar">
+            <div class="benefit-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                Seguridad Temprana
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-robot"></i>
+                Calidad Automatizada
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-gauge-high"></i>
+                Prácticas CI/CD
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-building-shield"></i>
+                DevSecOps Empresarial
+            </div>
+        </div>
 
-    <footer class="border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500">
-        &copy; 2026 FhasfDev — Universidad Central del Ecuador — Dispositivos Móviles.
-    </footer>
+    </div>
 
-    <script>
-        // Inicializar los íconos Lucide
-        lucide.createIcons();
-
-        // Lógica para cambiar de pestañas (Tabs)
-        function switchTab(event, tabId) {
-            // Ocultar todo el contenido de las pestañas
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
-
-            // Quitar estilos activos de todos los botones
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-blue-600/10', 'text-blue-400', 'border-blue-500/20', 'shadow-sm');
-                btn.classList.add('text-slate-400');
-            });
-
-            // Mostrar pestaña seleccionada
-            document.getElementById(tabId).classList.add('active');
-
-            // Dar estilos activos al botón presionado
-            event.currentTarget.classList.add('bg-blue-600/10', 'text-blue-400', 'border-blue-500/20', 'shadow-sm');
-            event.currentTarget.classList.remove('text-slate-400');
-        }
-
-        // Buscador interactivo en tiempo real
-        function searchFunction() {
-            let input = document.getElementById("searchInput").value.toLowerCase();
-            
-            // 1. Si busca algo, forzamos la visualización de todas las pestañas para auditar el contenido global
-            const contents = document.querySelectorAll('.tab-content');
-            if(input.length > 0) {
-                contents.forEach(content => content.classList.add('active'));
-            } else {
-                // Si limpia el buscador, restablecemos el comportamiento inicial (solo roadmap activo)
-                contents.forEach((content, index) => {
-                    if(index === 0) content.classList.add('active');
-                    else content.classList.remove('active');
-                });
-            }
-
-            // 2. Filtrar elementos individuales que tengan la clase 'target-search' o las sub-tarjetas
-            let items = document.querySelectorAll('.target-search, .p-4.rounded-xl.border');
-            items.forEach(item => {
-                let text = item.textContent.toLowerCase();
-                if(text.includes(input)) {
-                    item.style.display = ""; // Muestra el elemento
-                    item.style.opacity = "1";
-                } else {
-                    item.style.display = "none"; // Oculta el elemento si no coincide
-                }
-            });
-        }
-    </script>
 </body>
 </html>
