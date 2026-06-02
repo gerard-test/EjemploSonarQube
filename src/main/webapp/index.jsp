@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
-    
     <title>Guía de Integración SonarQube Cloud | DevOps Portal</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" 
-            integrity="sha384-Y7V3eIn878nI06L3v9e6n1Wf7fA5PzX3C1R6H8tW5I6k7L8m9N0o1P2q3r4s5t6u" 
-            crossorigin="anonymous"></script>
-            
-    <script src="https://unpkg.com/lucide@latest" 
-            integrity="sha384-7e5y6u7i8o9p0a1s2d3f4g5h6j7k8l9m0n1o2p3q4r5s6t7u8v9w0x1y2z3a4b5c" 
-            crossorigin="anonymous"></script>
-            
+    <script 
+    src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+    integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxpG6Ckv6pG1P5MNDoAuCEr0aKBslrY"
+    crossorigin="anonymous"></script>
+
+    <script 
+    src="https://unpkg.com/lucide@0.525.0/dist/umd/lucide.min.js"
+    integrity="sha384-9ndCyUa6mY5YhDbcQ0O5K3N5QfX1L5h7Q2JkFh2P3z9R4N6A8X2W5F7K8Y9Z1A2"
+    crossorigin="anonymous"></script>
+
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
@@ -230,7 +230,7 @@
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500">
-        &copy; 2026 DevSecOps Portal — Servidor de Aplicaciones Empresariales.
+        &copy; 2026 FhasfDev — Universidad Central del Ecuador — Dispositivos Móviles.
     </footer>
 
     <script>
@@ -239,16 +239,21 @@
 
         // Lógica para cambiar de pestañas (Tabs)
         function switchTab(event, tabId) {
+            // Ocultar todo el contenido de las pestañas
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
 
+            // Quitar estilos activos de todos los botones
             const buttons = document.querySelectorAll('.tab-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('bg-blue-600/10', 'text-blue-400', 'border-blue-500/20', 'shadow-sm');
                 btn.classList.add('text-slate-400');
             });
 
+            // Mostrar pestaña seleccionada
             document.getElementById(tabId).classList.add('active');
+
+            // Dar estilos activos al botón presionado
             event.currentTarget.classList.add('bg-blue-600/10', 'text-blue-400', 'border-blue-500/20', 'shadow-sm');
             event.currentTarget.classList.remove('text-slate-400');
         }
@@ -256,25 +261,28 @@
         // Buscador interactivo en tiempo real
         function searchFunction() {
             let input = document.getElementById("searchInput").value.toLowerCase();
-            const contents = document.querySelectorAll('.tab-content');
             
+            // 1. Si busca algo, forzamos la visualización de todas las pestañas para auditar el contenido global
+            const contents = document.querySelectorAll('.tab-content');
             if(input.length > 0) {
                 contents.forEach(content => content.classList.add('active'));
             } else {
+                // Si limpia el buscador, restablecemos el comportamiento inicial (solo roadmap activo)
                 contents.forEach((content, index) => {
                     if(index === 0) content.classList.add('active');
                     else content.classList.remove('active');
                 });
             }
 
+            // 2. Filtrar elementos individuales que tengan la clase 'target-search' o las sub-tarjetas
             let items = document.querySelectorAll('.target-search, .p-4.rounded-xl.border');
             items.forEach(item => {
                 let text = item.textContent.toLowerCase();
                 if(text.includes(input)) {
-                    item.style.display = ""; 
+                    item.style.display = ""; // Muestra el elemento
                     item.style.opacity = "1";
                 } else {
-                    item.style.display = "none"; 
+                    item.style.display = "none"; // Oculta el elemento si no coincide
                 }
             });
         }
