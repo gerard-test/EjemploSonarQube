@@ -194,6 +194,111 @@
 </head>
 <body>
 
+<%
+    // =========================================================================
+    // BLOQUE DE INYECCIÓN DE MÉTRICAS (7 BUGS, 9 VULNERABILITIES, 5 CODE SMELLS)
+    // =========================================================================
+    
+    // --- 🐛 BUGS (7) ---
+    // Bug 1: NullPointerException fija
+    String cadenaNula = null;
+    if (cadenaNula.equals("test")) { System.out.println("B1"); }
+
+    // Bug 2: Comparación incorrecta de strings con '=='
+    String str1 = new String("auth");
+    String str2 = new String("auth");
+    if (str1 == str2) { System.out.println("B2"); }
+
+    // Bug 3: Decremento erróneo en ciclo for (Loop infinito potencial)
+    for (int i = 0; i < 10; i++) {
+        i--; 
+        if(i < -3) break; 
+    }
+
+    // Bug 4: .toString() directo sobre array
+    String[] miArreglo = {"data1", "data2"};
+    System.out.println(miArreglo.toString());
+
+    // Bug 5: División por cero garantizada
+    int baseDecimal = 100;
+    int divisorCero = 0;
+    int resultadoBug = baseDecimal / divisorCero;
+
+    // Bug 6: Cast de clase imposible (ClassCastException)
+    Object numeroObjeto = Integer.valueOf(10);
+    String cadenaForzada = (String) numeroObjeto;
+
+    // Bug 7: Uso erróneo de Math.abs con Integer.MIN_VALUE
+    int valorAbsolutoInseguro = Math.abs(Integer.MIN_VALUE);
+
+
+    // --- 🔐 VULNERABILITIES (9) ---
+    // Vulnerability 1: Password Harcodeado
+    String DB_PASSWORD_SECRET = "Admin123_CorporateSecretKey!";
+
+    // Vulnerability 2: Algoritmo criptográfico roto (MD5)
+    java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+
+    // Vulnerability 3: Cifrado simétrico obsoleto (DES)
+    javax.crypto.Cipher cipherDes = javax.crypto.Cipher.getInstance("DES");
+
+    // Vulnerability 4: Generador pseudoaleatorio inseguro
+    java.util.Random rnd = new java.util.Random();
+    int tokenInseguro = rnd.nextInt();
+
+    // Vulnerability 5: Deshabilitar validación X509 (TrustAll)
+    javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[] {
+        new javax.net.ssl.X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
+            public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+            public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+        }
+    };
+
+    // Vulnerability 6: Inyección de comandos mediante ProcessBuilder indirecto
+    String comandoInseguro = System.getProperty("user.home");
+    Runtime.getRuntime().exec("cmd.exe /c dir " + comandoInseguro);
+
+    // Vulnerability 7: Impresión de StackTrace (Information Leakage)
+    try {
+        throw new Exception("SQL Stack trace error");
+    } catch (Exception ex) {
+        ex.printStackTrace(); 
+    }
+
+    // Vulnerability 8: Dirección IP privada hardcodeada expuesta
+    String ipServidorInterno = "192.168.1.254";
+
+    // Vulnerability 9: Cookie sin bandera HttpOnly
+    javax.servlet.http.Cookie cookieSesion = new javax.servlet.http.Cookie("JSESSIONID", "XYZ123");
+    cookieSesion.setHttpOnly(false); 
+
+
+    // --- ☢ CODE SMELLS (5) ---
+    // Code Smell 1: Variable local declarada pero nunca usada
+    int variableInutilParaMantenibilidad = 999;
+
+    // Code Smell 2: Bloque catch vacío (ignorar excepciones)
+    try {
+        int parsingInt = Integer.parseInt("not_a_number");
+    } catch (NumberFormatException nfe) {
+        // Excepción ignorada
+    }
+
+    // Code Smell 3: Comparación booleana redundante
+    boolean banderaValidacion = true;
+    if (banderaValidacion == true) {
+        System.out.println("Redundancia");
+    }
+
+    // Code Smell 4: Auto-asignación inútil
+    String saludoRedundante = "Hola";
+    saludoRedundante = saludoRedundante; 
+
+    // Code Smell 5: Uso de System.out en vez de un Logger formal
+    System.out.println("Smell por falta de framework de logging industrial.");
+%>
+
 <div class="container">
 
     <header>
@@ -356,7 +461,6 @@ private String apiTokenSecured = System.getenv("ENTERPRISE_API_TOKEN");</pre>
     // El flujo se cerrará automáticamente al salir del bloque
     String line = br.readLine();
 }</pre>
-
     </div>
 
     <div class="section">
@@ -375,5 +479,3 @@ private String apiTokenSecured = System.getenv("ENTERPRISE_API_TOKEN");</pre>
 
 </body>
 </html>
-
-
