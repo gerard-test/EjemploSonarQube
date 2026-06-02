@@ -122,14 +122,19 @@
         .benefit-card:hover {
             background-color: rgba(0, 122, 204, 0.1);
         }
+
+        /* Estilo personalizado para la maqueta integrada */
+        .mockup-img {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
+        .mockup-img:hover {
+            opacity: 0.95;
+        }
     </style>
 </head>
 <body class="py-5">
-
-    <%
-    // CODE SMELL: Usar System.out de manera directa en lugar de un Logger
-    System.out.println("Iniciando la carga de la vista de SonarQube...");
-%>
 
     <div class="container">
         <div class="card main-card p-4 p-md-5">
@@ -194,6 +199,10 @@
                     <div class="kpi-panel p-4 h-100 d-flex flex-column justify-content-between">
                         <div>
                             <h3 class="kpi-title pb-2 mb-3">Resumen Ejecutivo</h3>
+                            
+                            <div class="text-center mb-4">
+                                <img src="assets/dashboard-mockup.png" alt="Esquema del Flujo Automatizado" class="img-fluid rounded-3 mockup-img">
+                            </div>
                             
                             <div class="mb-3">
                                 <span class="kpi-label d-block mb-1">Herramientas Clave</span>
