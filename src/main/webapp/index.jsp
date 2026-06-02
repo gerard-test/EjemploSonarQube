@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.io.*, java.util.*, java.security.SecureRandom" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Contenedor Principal Estilo Holográfico */
         .main-card {
             background: linear-gradient(145deg, #ffffff, #f4f8fc);
             border-radius: 28px;
@@ -46,18 +46,11 @@
             letter-spacing: 1.5px;
         }
 
-        /* Bloques de Pasos Superiores (01, 02, 03) */
         .step-box {
             background-color: #ffffff;
             border: 1px solid rgba(226, 236, 247, 0.8);
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .step-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.08);
         }
 
         .step-header {
@@ -72,7 +65,6 @@
             color: #384d66;
         }
 
-        /* Panel de Resumen Ejecutivo de la Derecha */
         .kpi-container {
             background-color: #ffffff;
             border-radius: 20px;
@@ -99,20 +91,13 @@
             color: #1e293b;
         }
 
-        /* Contenedor e Imagen del Flujo Central */
         .display-mockup {
             max-width: 100%;
             height: auto;
             border-radius: 16px;
             box-shadow: 0 12px 32px rgba(0, 122, 204, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .display-mockup:hover {
-            transform: scale(1.01);
         }
 
-        /* Nodo de flujo horizontal inferior */
         .pipeline-wrapper {
             background-color: rgba(255, 255, 255, 0.7);
             border-radius: 16px;
@@ -126,10 +111,8 @@
             font-weight: 700;
             font-size: 0.78rem;
             color: #334155;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
 
-        /* Beneficios del Footer (Los 5 bloques de abajo) */
         .feature-badge {
             background-color: #ffffff;
             border: 1px solid rgba(0, 122, 204, 0.08);
@@ -137,18 +120,33 @@
             font-weight: 700;
             font-size: 0.8rem;
             color: #1e293b;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
-            transition: all 0.2s ease;
-        }
-
-        .feature-badge:hover {
-            background-color: #f1f5f9;
-            border-color: var(--accent-blue);
         }
     </style>
 </head>
 <body class="py-4 py-md-5">
 
+    <%
+        // 1. ERROR DE SEGURIDAD (Security - Vulnerabilidad Crítica de XSS)
+        // Recibir un parámetro directamente e imprimirlo sin sanitizar en el HTML posterior.
+        String usuarioInseguro = request.getParameter("user"); 
+
+        // 2. ERROR DE FIABILIDAD (Reliability - Bug de ejecución potencial)
+        // Provocar un NullPointerException garantizado o usar un flujo que Sonar detecte como bucle infinito/inutilizable.
+        String cadenaNula = null;
+        try {
+            if (cadenaNula.equals("test")) { 
+                // Esto siempre fallará en ejecución, SonarQube detecta el Bug de desreferencia nula.
+                out.println("No se ejecutará");
+            }
+        } catch (Exception e) {
+            // 3. ERROR DE MANTENIBILIDAD (Maintainability - Code Smell por mala gestión de excepciones)
+            e.printStackTrace(); // Anti-patrón severo: expone trazas de error y no usa un Logger estructurado.
+        }
+
+        // Code Smell Extra de Mantenibilidad: Código muerto/inútil y variables declaradas que no se usan.
+        int variableInutil = 42; 
+        String cadenaVacia = "";
+    %>
     <div class="container">
         <div class="card main-card p-4 p-lg-5">
             
@@ -159,6 +157,10 @@
                     con GitHub Actions
                 </h1>
                 <p class="subtitle text-uppercase small m-0">Integrando SonarQube Cloud</p>
+                
+                <% if(usuarioInseguro != null) { %>
+                    <div class="alert alert-warning mt-2">Bienvenido: <%= usuarioInseguro %></div>
+                <% } %>
             </header>
 
             <div class="row g-4 mb-4">
@@ -180,9 +182,9 @@
                             <div class="step-box p-3 h-100 d-flex flex-column justify-content-between">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="step-num">02.</span>
-                                    <span class="badge bg-light text-primary step-header text-uppercase">Flujo de Trabajo CI/CD</span>
+                                    <span class="badge bg-light text-primary step-header text-uppercase">Flujo de Trabajo</span>
                                 </div>
-                                <div class="small text-muted"><i class="fa-solid fa-arrows-spin text-accent me-2"></i>GitHub Actions Pipeline</div>
+                                <div class="small text-muted"><i class="fa-solid fa-arrows-spin text-accent me-2"></i>GitHub Actions Workflow</div>
                             </div>
                         </div>
                         
@@ -221,7 +223,7 @@
                                 </div>
                             </div>
                             
-                            <div class="kpi-card p-3 mb-3 style-errors" style="border-left-color: #ef4444;">
+                            <div class="kpi-card p-3 mb-3" style="border-left-color: #ef4444;">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <span class="kpi-title d-block text-uppercase">Conteo de Errores <span class="badge bg-light text-muted fw-normal">KPI</span></span>
@@ -231,7 +233,7 @@
                                 </div>
                             </div>
                             
-                            <div class="kpi-card p-3 mb-3 style-smells" style="border-left-color: #10b981;">
+                            <div class="kpi-card p-3 mb-3" style="border-left-color: #10b981;">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <span class="kpi-title d-block text-uppercase">Olores de Código <span class="badge bg-light text-muted fw-normal">KPI</span></span>
@@ -243,7 +245,7 @@
                         </div>
 
                         <div class="pt-3 border-top bg-light p-3 rounded-3 mt-3">
-                            <span class="text-uppercase text-muted d-block mb-2 style-smells" style="font-size: 0.7rem; font-weight:700;">Tecnología Base</span>
+                            <span class="text-uppercase text-muted d-block mb-2" style="font-size: 0.7rem; font-weight:700;">Tecnología Base</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="fw-bold small text-dark"><i class="fa-solid fa-cube text-warning me-2"></i>Java Web App (pom.xml)</span>
                                 <span class="badge bg-dark">Maven</span>
