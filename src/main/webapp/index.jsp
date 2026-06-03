@@ -4,403 +4,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard DevSecOps: SonarQube Cloud</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" 
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
-          crossorigin="anonymous" 
-          referrerpolicy="no-referrer" />
-    
+    <title>Guía de Integración SonarQube Cloud</title>
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-card: #131a26;
-            --bg-card-hover: #1c2536;
-            --border-color: #222f43;
-            --text-title: #ffffff;
-            --text-body: #94a3b8;
-            --primary: #38bdf8;
-            --accent: #a855f7;
-            --success: #34d399;
-            --code-bg: #070a12;
+            --primary: #0056b3;
+            --primary-light: #e6f0fa;
+            --success: #28a745;
+            --dark: #2c3e50;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            padding: 40px 20px; 
+            color: var(--dark); 
+            background-color: var(--bg);
             margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-body);
-            line-height: 1.6;
-            padding: 40px 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 25px;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .header-title h1 {
-            color: var(--text-title);
-            font-size: 2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-title h1 span {
+        h1 {
             color: var(--primary);
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 15px;
+            margin-top: 0;
+            font-size: 2.2rem;
         }
 
-        .status-badge {
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .progress-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--text-title);
-        }
-
-        .progress-bar-bg {
-            background: var(--border-color);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 0%;
-            height: 100%;
-            transition: width 0.4s ease;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 7fr 4fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-            transition: border-color 0.3s ease;
-        }
-
-        .panel:hover {
-            border-color: #334155;
-        }
-
-        .panel-title {
-            color: var(--text-title);
-            font-size: 1.25rem;
-            margin-bottom: 20px;
+        h2 { 
+            color: var(--primary); 
+            margin-top: 35px;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .interactive-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .step-label {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px;
-            background: #172030;
-            border: 1px solid var(--border-color);
+        /* Barra de Progreso Interactiva */
+        .progress-container {
+            background: #eee;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .step-label:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-        }
-
-        .step-label input[type="checkbox"] {
-            appearance: none;
-            width: 20px;
             height: 20px;
-            border: 2px solid var(--text-body);
-            border-radius: 4px;
-            outline: none;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
+            width: 100%;
+            margin: 25px 0;
+            overflow: hidden;
         }
 
-        .step-label input[type="checkbox"]:checked {
-            background-color: var(--success);
-            border-color: var(--success);
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
         }
 
-        .step-label input[type="checkbox"]:checked::after {
-            content: "\f00c";
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
-            color: #000;
-            font-size: 11px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .step-label input[type="checkbox"]:checked + span {
-            text-decoration: line-through;
-            color: #64748b;
-        }
-
-        .step-label span {
-            font-weight: 500;
-            color: var(--text-title);
-            transition: color 0.2s ease;
-        }
-
-        .panel-list {
-            list-style: none;
-        }
-
-        .panel-list li {
-            margin-bottom: 14px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .panel-list li i {
-            margin-top: 5px;
-        }
-
-        .code-snippet {
-            font-family: 'JetBrains Mono', monospace;
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
+        /* Lista de verificación interactiva */
+        .section-tasks { 
+            background: var(--primary-light);
+            padding: 20px 25px;
             border-radius: 8px;
-            padding: 15px;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            overflow-x: auto;
+            border-left: 5px solid var(--primary);
         }
 
-        .code-keyword { color: var(--accent); }
-        .code-string { color: var(--success); }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tag {
-            background: #1e293b;
-            border: 1px solid #334155;
-            color: #e2e8f0;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+        .task-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,86,179,0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+        }
+
+        .task-item input[type="checkbox"] {
+            margin-right: 15px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+
+        .task-item span {
+            font-size: 1.1rem;
+            transition: color 0.3s ease, text-decoration 0.3s ease;
+        }
+
+        .task-item input[type="checkbox"]:checked + span {
+            color: #7f8c8d;
+            text-decoration: line-through;
+        }
+
+        /* Estilos de las secciones informativas */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            list-style-type: none;
+            position: relative;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .security-list li::before {
+            content: "✔";
+            color: var(--success);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        
-        <header>
-            <div class="header-title">
-                <h1>SonarQube <span>Cloud Integration</span></h1>
-                <p style="margin-top: 5px;">Automatización de Análisis Estático de Código (SAST)</p>
-            </div>
-            <div class="status-badge">
-                <i class="fa-solid fa-circle-dot"></i> Pipeline Activo
-            </div>
-        </header>
+<div class="container">
+    <h1>🚀 Pipeline CI/CD: DevOps & DevSecOps</h1>
+    
+    <p>Haz clic en cada objetivo de la guía para medir tu progreso en la integración de calidad de código:</p>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-        <div class="progress-container">
-            <div class="progress-text">
-                <span>Progreso de la Implementación</span>
-                <span id="progress-percentage">0%</span>
-            </div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-bar"></div>
-            </div>
+    <div class="section-tasks"> 
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>¿Qué es SonarQube Cloud?</span>
         </div>
-
-        <div class="dashboard-grid">
-            
-            <main>
-                <div class="panel">
-                    <h2 class="panel-title"><i class="fa-solid fa-square-check" style="color: var(--primary);"></i> Checklist de Integración</h2>
-                    <div class="interactive-list">
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>¿Qué es SonarQube Cloud y su alcance?</span>
-                        </label>
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>Conexión del repositorio GitHub a SonarQube Cloud</span>
-                        </label>
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>Generación del Token de Acceso en Sonar</span>
-                        </label>
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>Configuración de Secrets en el Repositorio de GitHub</span>
-                        </label>
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>Estructuración del flujo de trabajo YAML para Actions</span>
-                        </label>
-                        <label class="step-label">
-                            <input type="checkbox" class="pipeline-checkbox">
-                            <span>Ejecución del análisis de código automatizado</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <h2 class="panel-title"><i class="fa-solid fa-code" style="color: var(--accent);"></i> Ejemplo de Configuración GitHub Actions</h2>
-                    <div class="code-snippet">
-                        <span class="code-keyword">name:</span> <span class="code-string">SonarQube Analysis</span><br>
-                        <span class="code-keyword">on:</span> [push, pull_request]<br>
-                        <span class="code-keyword">jobs:</span><br>
-                        &nbsp;&nbsp;<span class="code-keyword">sonarcloud:</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">runs-on:</span> ubuntu-latest<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">steps:</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-keyword">uses:</span> actions/checkout@v4<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="code-keyword">name:</span> Analyze with SonarCloud<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">env:</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">SONAR_TOKEN:</span> ${{ secrets.SONAR_TOKEN }}
-                    </div>
-                </div>
-            </main>
-
-            <aside>
-                <div class="panel">
-                    <h2 class="panel-title"><i class="fa-solid fa-circle-nodes" style="color: var(--success);"></i> Core DevSecOps</h2>
-                    <ul class="panel-list">
-                        <li>
-                            <i class="fa-solid fa-shield-halved" style="color: var(--success);"></i>
-                            <div>
-                                <strong style="color: var(--text-title);">Seguridad Shift-Left</strong>
-                                <p style="font-size: 0.9rem;">Detección temprana de vulnerabilidades antes de compilar a producción.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-bolt" style="color: var(--primary);"></i>
-                            <div>
-                                <strong style="color: var(--text-title);">Calidad Automatizada</strong>
-                                <p style="font-size: 0.9rem;">Métricas de cobertura de pruebas, bugs y duplicación de código en cada Push.</p>
-                            </div>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-gears" style="color: var(--accent);"></i>
-                            <div>
-                                <strong style="color: var(--text-title);">Ecosistema CI/CD</strong>
-                                <p style="font-size: 0.9rem;">Integración transparente con flujos de trabajo empresariales modernos.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="panel">
-                    <h2 class="panel-title"><i class="fa-solid fa-layer-group"></i> Stack de Ingeniería</h2>
-                    <div class="tech-tags" style="margin-bottom: 20px;">
-                        <span class="tag"><i class="fa-brands fa-github"></i> GitHub Enterprise</span>
-                        <span class="tag"><i class="fa-solid fa-circle-play" style="color:var(--success);"></i> Actions</span>
-                        <span class="tag"><i class="fa-solid fa-cloud" style="color:var(--primary);"></i> SonarCloud</span>
-                        <span class="tag"><i class="fa-solid fa-box" style="color:var(--accent);"></i> Maven / Java</span>
-                    </div>
-
-                    <h2 class="panel-title" style="font-size: 1.1rem;"><i class="fa-solid fa-user-gear"></i> Roles Clave</h2>
-                    <div class="tech-tags">
-                        <span class="tag">DevOps Engineer</span>
-                        <span class="tag">DevSecOps Specialist</span>
-                        <span class="tag">Cloud Architect</span>
-                    </div>
-                </div>
-            </aside>
-
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Cómo conectar un repositorio de GitHub a SonarQube Cloud</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Generar token de Sonar</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Configurar secretos de GitHub</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Crear flujo de trabajo YAML para GitHub Actions</span>
+        </div>
+        <div class="task-item" onclick="toggleTask(this)">
+            <input type="checkbox" onchange="updateProgress()">
+            <span>Ejecutar análisis estático automatizado de código</span>
         </div>
     </div>
 
-    <script>
-        const checkboxes = document.querySelectorAll('.pipeline-checkbox');
-        const progressBar = document.getElementById('progress-bar');
-        const progressPercentage = document.getElementById('progress-percentage');
+    <div class="grid">
+        <div class="card">
+            <h2>🎯 Integración fundamental para:</h2>
+            <ul>
+                <li>Ingenieros de DevOps</li>
+                <li>Ingenieros de DevSecOps</li>
+                <li>Ingenieros de la nube</li>
+                <li>Administradores de GitHub Enterprise</li>
+            </ul>
+        </div>
 
-        function updateProgress() {
-            const total = checkboxes.length;
-            const checked = document.querySelectorAll('.pipeline-checkbox:checked').length;
-            const percentage = Math.round((checked / total) * 100);
-            
-            progressBar.style.width = `${percentage}%`;
-            progressPercentage.innerText = `${percentage}%`;
+        <div class="card">
+            <h2>🛠️ Herramientas utilizadas:</h2>
+            <ul>
+                <li>GitHub / GitHub Actions</li>
+                <li>SonarQube Cloud</li>
+                <li>Maven & Java (App Web)</li>
+                <li>Jetty Server</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 25px;">
+        <h2>🔐 ¿Por qué es importante?</h2>
+        <ul class="security-list">
+            <li>Seguridad desde las primeras etapas del desarrollo (Shift-Left Security)</li>
+            <li>Calidad de código e inspección automatizada</li>
+            <li>Mejores prácticas de arquitectura CI/CD</li>
+            <li>Implementación de DevSecOps a nivel empresarial</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Permite marcar la casilla haciendo clic en cualquier parte de la fila
+    function toggleTask(element) {
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        if (event.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+            updateProgress();
         }
+    }
 
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateProgress);
-        });
-    </script>
+    // Calcula el porcentaje completado y actualiza la barra
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('.task-item input[type="checkbox"]');
+        const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+        const totalCount = checkboxes.length;
+        
+        const percentage = Math.round((checkedCount / totalCount) * 100);
+        const progressBar = document.getElementById('progressBar');
+        
+        progressBar.style.width = percentage + '%';
+    }
+</script>
+
 </body>
 </html>
