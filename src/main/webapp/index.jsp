@@ -10,7 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all.min.css" fallback="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -293,21 +297,21 @@
                     <h2 class="panel-title">🔐 ¿Por qué es fundamental esta integración?</h2>
                     <ul class="panel-list">
                         <li>
-                            <span style="color: var(--success);">✔</span>
+                            <span style="color: var(--success); font-weight: bold;">✔</span>
                             <div>
                                 <strong style="color: var(--text-title);">Seguridad Shift-Left</strong>
                                 <p style="font-size: 0.9rem;">Detección e interceptación de vulnerabilidades en las etapas tempranas de desarrollo antes de compilar a entornos productivos.</p>
                             </div>
                         </li>
                         <li>
-                            <span style="color: var(--primary);">✔</span>
+                            <span style="color: var(--primary); font-weight: bold;">✔</span>
                             <div>
                                 <strong style="color: var(--text-title);">Calidad Automatizada</strong>
                                 <p style="font-size: 0.9rem;">Inspección continua de bugs, olores de código (code smells) y porcentaje de código duplicado en cada push.</p>
                             </div>
                         </li>
                         <li>
-                            <span style="color: var(--accent);">✔</span>
+                            <span style="color: var(--accent); font-weight: bold;">✔</span>
                             <div>
                                 <strong style="color: var(--text-title);">Cultura DevSecOps Empresarial</strong>
                                 <p style="font-size: 0.9rem;">Adopción de flujos de trabajo estandarizados bajo arquitecturas modernas y robustas de integración y despliegue continuos.</p>
@@ -321,20 +325,20 @@
                 <div class="panel">
                     <h2 class="panel-title">👥 Roles de Ingeniería Destinados</h2>
                     <div class="tech-tags">
-                        <span class="tag">DevOps Engineer</span>
-                        <span class="tag">DevSecOps Specialist</span>
-                        <span class="tag">Cloud Architect</span>
-                        <span class="tag">GitHub Enterprise Admin</span>
+                        <span class="tag"><i class="fas fa-user-shield"></i> DevOps Engineer</span>
+                        <span class="tag"><i class="fas fa-shield-alt"></i> DevSecOps Specialist</span>
+                        <span class="tag"><i class="fas fa-server"></i> Cloud Architect</span>
+                        <span class="tag"><i class="fas fa-sitemap"></i> GitHub Enterprise Admin</span>
                     </div>
                 </div>
 
                 <div class="panel">
                     <h2 class="panel-title">🛠️ Ecosistema Tecnológico</h2>
                     <div class="tech-tags">
-                        <span class="tag">GitHub Ecosystem</span>
-                        <span class="tag">GitHub Actions</span>
-                        <span class="tag">SonarQube Cloud</span>
-                        <span class="tag">Maven / Java Archetype</span>
+                        <span class="tag"><i class="fab fa-github"></i> GitHub Ecosystem</span>
+                        <span class="tag"><i class="fas fa-play-circle"></i> GitHub Actions</span>
+                        <span class="tag"><i class="fas fa-search-code"></i> SonarQube Cloud</span>
+                        <span class="tag"><i class="fab fa-java"></i> Maven / Java Archetype</span>
                     </div>
                 </div>
             </aside>
