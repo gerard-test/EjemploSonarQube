@@ -5,257 +5,331 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía de Integración SonarQube Cloud</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --bg-color: #f0f4f9;
             --primary-color: #0b2545;
             --accent-blue: #007acc;
             --accent-purple: #6f42c1;
+            --text-dark: #333333;
+            --card-bg: #ffffff;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
         }
 
-        /* Contenedor principal estilo tarjeta holográfica de la imagen */
-        .main-card {
+        .container {
+            max-width: 1200px;
+            width: 100%;
             background: linear-gradient(145deg, #ffffff, #e6eef8);
-            border-radius: 24px;
-            border: none;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        /* Títulos e Identidad Visual */
-        .main-title {
+        /* Encabezado Principal */
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
             color: var(--primary-color);
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
             font-weight: 800;
             line-height: 1.2;
-            letter-spacing: -0.5px;
         }
 
-        .subtitle {
+        .header-section p {
             color: var(--accent-blue);
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
         }
 
-        /* Tarjetas de pasos (01, 02, 03) */
-        .step-card {
-            background-color: #ffffff;
-            border: 1px solid rgba(0, 122, 204, 0.15);
-            border-radius: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
+        /* Grid Principal (Izquierda: Pasos, Derecha: KPIs) */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
         }
-        
-        .step-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Pasos del Proceso (Estilo 01, 02, 03) */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .step-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            position: relative;
         }
 
         .step-number {
-            font-size: 1.75rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
-        .step-badge {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #6c757d;
-        }
-
-        /* Panel de Resumen Ejecutivo (KPI Lateral) */
-        .kpi-panel {
-            background-color: var(--primary-color);
-            border-radius: 16px;
-            color: #ffffff;
-        }
-
-        .kpi-title {
+        .step-number span {
             font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .step-card p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-card p i {
+            color: #28a745;
+            font-size: 0.85rem;
+        }
+
+        /* Panel de Resumen Ejecutivo (KPIs) */
+        .kpi-panel {
+            background: var(--primary-color);
+            color: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(11, 37, 69, 0.2);
+        }
+
+        .kpi-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #cbd5e1;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            color: #cbd5e1;
         }
+
+        .kpi-item {
+            margin-bottom: 20px;
+        }
+
+        .kpi-item:last-child { margin-bottom: 0; }
 
         .kpi-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             color: #94a3b8;
+            display: block;
+            margin-bottom: 2px;
         }
 
-        /* Nodo de flujo horizontal */
-        .pipeline-container {
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 16px;
+        .kpi-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kpi-value i {
+            color: #38bdf8;
+        }
+
+        /* Flujo de Trabajo (Pipeline Inferior) */
+        .pipeline-section {
+            margin-bottom: 40px;
+        }
+
+        .pipeline-section h2 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .pipeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .pipeline-node {
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.06);
+            background: var(--card-bg);
+            padding: 12px 20px;
             border-radius: 10px;
-            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             font-size: 0.85rem;
+            font-weight: 700;
             color: var(--primary-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* Tarjetas de beneficios del footer */
+        .pipeline-node i {
+            color: var(--accent-purple);
+        }
+
+        .pipeline-arrow {
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .pipeline { flex-direction: column; align-items: stretch; }
+            .pipeline-arrow { text-align: center; transform: rotate(90deg); margin: 5px 0; }
+        }
+
+        /* Beneficios (Barra Inferior) */
+        .benefits-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
         .benefit-card {
-            background-color: rgba(0, 122, 204, 0.05);
+            background: rgba(0, 122, 204, 0.06);
             border: 1px solid rgba(0, 122, 204, 0.1);
+            padding: 15px;
             border-radius: 12px;
+            text-align: center;
+            font-size: 0.85rem;
             font-weight: 700;
-            font-size: 0.9rem;
             color: var(--primary-color);
-            transition: background-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
         }
 
         .benefit-card:hover {
-            background-color: rgba(0, 122, 204, 0.1);
+            transform: translateY(-3px);
+            background: rgba(0, 122, 204, 0.1);
+        }
+
+        .benefit-card i {
+            font-size: 1.3rem;
+            color: var(--accent-blue);
         }
     </style>
 </head>
-<body class="py-5">
+<body>
 
     <div class="container">
-        <div class="card main-card p-4 p-md-5">
+        
+        <div class="header-section">
+            <h1>Análisis Estático de Calidad<br>de Código Automatizado<br>con GitHub Actions</h1>
+            <p>Integrando SonarQube Cloud</p>
+        </div>
+
+        <div class="main-layout">
             
-            <header class="mb-5">
-                <h1 class="display-5 main-title text-uppercase mb-2">
-                    Análisis Estático de Calidad<br>
-                    de Código Automatizado<br>
-                    con GitHub Actions
-                </h1>
-                <p class="subtitle text-uppercase m-0">Integrando SonarQube Cloud</p>
-            </header>
-
-            <div class="row g-4 mb-5">
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01. <span>Disparador</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> ¿Qué es SonarQube Cloud?</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Conectar repositorio</p>
+                </div>
                 
-                <div class="col-lg-8">
-                    <div class="row g-3">
-                        
-                        <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">01.</span>
-                                    <span class="step-badge">Disparador</span>
-                                </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>¿Qué es SonarQube Cloud?</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Conectar repositorio</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">02.</span>
-                                    <span class="step-badge">Flujo CI/CD</span>
-                                </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Generar token Sonar</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Configurar secretos</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="step-card p-4 h-100">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <span class="step-number">03.</span>
-                                    <span class="step-badge">Escaneo</span>
-                                </div>
-                                <ul class="list-unstyled m-0">
-                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Crear YAML Actions</li>
-                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Ejecutar análisis</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="step-card">
+                    <div class="step-number">02. <span>CI/CD Workflow</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> Generar token Sonar</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Configurar secretos</p>
                 </div>
-
-                <div class="col-lg-4">
-                    <div class="kpi-panel p-4 h-100 d-flex flex-column justify-content-between">
-                        <div>
-                            <h3 class="kpi-title pb-2 mb-3">Resumen Ejecutivo</h3>
-                            
-                            <div class="mb-3">
-                                <span class="kpi-label d-block mb-1">Herramientas Clave</span>
-                                <div class="fw-bold mb-1"><i class="fa-brands fa-github text-info me-2"></i>GitHub Actions</div>
-                                <div class="fw-bold"><i class="fa-solid fa-cloud text-info me-2"></i>SonarQube Cloud</div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-3">
-                            <span class="kpi-label d-block mb-1">Stack Soportado</span>
-                            <div class="fw-bold"><i class="fa-solid fa-cube text-warning me-2"></i>Maven / Java</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="mb-5">
-                <h4 class="h6 text-uppercase fw-bold text-muted mb-3">Flujo del pipeline & Roles de Ingeniería</h4>
-                <div class="pipeline-container p-3">
-                    <div class="row g-2 align-items-center text-center">
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-users me-2 text-primary"></i>DevSecOps / DevOps</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-brands fa-git-alt me-2 text-danger"></i>Git Repo</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-gears me-2 text-secondary"></i>Maven Build</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-network-wired me-2 text-success"></i>GH Actions</div></div>
-                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
-                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-square-poll-vertical me-2 text-info"></i>Sonar Report</div></div>
-                    </div>
+                
+                <div class="step-card">
+                    <div class="step-number">03. <span>Sonar Scan</span></div>
+                    <p><i class="fa-solid : fa-circle-check"></i> Crear archivo YAML</p>
+                    <p><i class="fa-solid : fa-circle-check"></i> Ejecutar análisis</p>
                 </div>
             </div>
 
-            <footer>
-                <h2 class="h5 fw-bold mb-3 text-dark"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>¿Por qué es importante esta implementación?</h2>
-                <div class="row g-3">
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-shield-cat-vampire mb-2 text-primary fs-4"></i>
-                            Seguridad Temprana
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-robot mb-2 text-primary fs-4"></i>
-                            Calidad Automatizada
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-bolt mb-2 text-primary fs-4"></i>
-                            Prácticas CI/CD
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                            <i class="fa-solid fa-building-shield mb-2 text-primary fs-4"></i>
-                            DevSecOps Empresarial
-                        </div>
-                    </div>
+            <div class="kpi-panel">
+                <h3>Resumen Ejecutivo</h3>
+                <div class="kpi-item">
+                    <span class="kpi-label">Herramientas Utilizadas</span>
+                    <span class="kpi-value"><i class="fa-brands fa-github"></i> GitHub Actions</span>
+                    <span class="kpi-value" style="font-size: 1.1rem; margin-top: 5px;"><i class="fa-solid fa-cloud"></i> SonarQube Cloud</span>
                 </div>
-            </footer>
+                <div class="kpi-item">
+                    <span class="kpi-label">Entorno / Stack</span>
+                    <span class="kpi-value"><i class="fa-solid fa-cube"></i> Maven / Java</span>
+                </div>
+            </div>
 
         </div>
+
+        <div class="pipeline-section">
+            <h2>Flujo de Integración y Roles Clave</h2>
+            <div class="pipeline">
+                <div class="pipeline-node"><i class="fa-solid fa-users"></i> DevOps / DevSecOps</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-brands fa-git-alt"></i> Repositorio Git</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-gears"></i> Construcción (Maven)</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-network-wired"></i> GitHub Actions</div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="pipeline-node"><i class="fa-solid fa-magnifying-glass-chart"></i> Reporte SonarQube</div>
+            </div>
+        </div>
+
+        <h2>🔐 ¿Por qué es importante esta integración?</h2>
+        <div class="benefits-bar">
+            <div class="benefit-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                Seguridad Temprana
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-robot"></i>
+                Calidad Automatizada
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-gauge-high"></i>
+                Prácticas CI/CD
+            </div>
+            <div class="benefit-card">
+                <i class="fa-solid fa-building-shield"></i>
+                DevSecOps Empresarial
+            </div>
+        </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
