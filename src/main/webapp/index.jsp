@@ -1,306 +1,261 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía de Integración SonarQube Cloud</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --primary: #0056b3;
-            --primary-light: #e6f0fa;
-            --success: #28a745;
-            --dark: #2c3e50;
-            --bg: #f8f9fa;
-            --card-bg: #ffffff;
+            --bg-color: #f0f4f9;
+            --primary-color: #0b2545;
+            --accent-blue: #007acc;
+            --accent-purple: #6f42c1;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            padding: 40px 20px; 
-            color: var(--dark); 
-            background-color: var(--bg);
-            margin: 0;
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 40px;
+        /* Contenedor principal estilo tarjeta holográfica de la imagen */
+        .main-card {
+            background: linear-gradient(145deg, #ffffff, #e6eef8);
+            border-radius: 24px;
+            border: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Títulos e Identidad Visual */
+        .main-title {
+            color: var(--primary-color);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--accent-blue);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Tarjetas de pasos (01, 02, 03) */
+        .step-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 122, 204, 0.15);
+            border-radius: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .step-number {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+
+        .step-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6c757d;
+        }
+
+        /* Panel de Resumen Ejecutivo (KPI Lateral) */
+        .kpi-panel {
+            background-color: var(--primary-color);
+            border-radius: 16px;
+            color: #ffffff;
+        }
+
+        .kpi-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .kpi-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        /* Nodo de flujo horizontal */
+        .pipeline-container {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+        }
+
+        .pipeline-node {
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+        }
+
+        /* Tarjetas de beneficios del footer */
+        .benefit-card {
+            background-color: rgba(0, 122, 204, 0.05);
+            border: 1px solid rgba(0, 122, 204, 0.1);
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            transition: background-color 0.2s;
         }
 
-        h1 {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary-light);
-            padding-bottom: 15px;
-            margin-top: 0;
-            font-size: 2.2rem;
-        }
-
-        h2 { 
-            color: var(--primary); 
-            margin-top: 35px;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Barra de Progreso */
-        .progress-container {
-            background: #eee;
-            border-radius: 8px;
-            height: 20px;
-            width: 100%;
-            margin: 25px 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, var(--primary), var(--success));
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        /* Bloque principal: Tareas + Imagen */
-        .main-workspace {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 30px;
-            align-items: start;
-            margin-bottom: 30px;
-        }
-
-        @media (max-width: 850px) {
-            .main-workspace { grid-template-columns: 1fr; }
-        }
-
-        .section-tasks { 
-            background: var(--primary-light);
-            padding: 20px 25px;
-            border-radius: 8px;
-            border-left: 5px solid var(--primary);
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,86,179,0.1);
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .task-item:last-child {
-            border-bottom: none;
-        }
-
-        .task-item:hover {
-            transform: translateX(5px);
-        }
-
-        .task-item input[type="checkbox"] {
-            margin-right: 15px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--success);
-        }
-
-        .task-item span {
-            font-size: 1.05rem;
-            transition: color 0.3s ease, text-decoration 0.3s ease;
-        }
-
-        .task-item input[type="checkbox"]:checked + span {
-            color: #7f8c8d;
-            text-decoration: line-through;
-        }
-
-        /* Contenedor de la Imagen del Dashboard */
-        .mockup-container {
-            background: #ffffff;
-            border: 2px dashed #cbd5e1;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-
-        .mockup-container h3 {
-            margin-top: 0;
-            font-size: 1rem;
-            color: #64748b;
-        }
-
-        .mockup-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease;
-        }
-
-        .mockup-img:hover {
-            transform: scale(1.03);
-        }
-
-        /* Cuadrícula de Información Inferior */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: #fdfdfd;
-            border: 1px solid #e2e8f0;
-            padding: 20px;
-            border-radius: 8px;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        ul {
-            padding-left: 20px;
-            margin: 0;
-        }
-
-        li {
-            margin-bottom: 10px;
-            list-style-type: none;
-            position: relative;
-        }
-
-        li::before {
-            content: "•";
-            color: var(--primary);
-            font-weight: bold;
-            display: inline-block;
-            width: 1em;
-            margin-left: -1em;
-        }
-
-        .security-list li::before {
-            content: "✔";
-            color: var(--success);
+        .benefit-card:hover {
+            background-color: rgba(0, 122, 204, 0.1);
         }
     </style>
 </head>
-<body>
+<body class="py-5">
 
-<div class="container">
-    <h1>🚀 Pipeline CI/CD: DevOps & DevSecOps</h1>
-    
-    <p>Haz clic en cada objetivo de la guía para medir tu progreso en la integración y visualizar el avance:</p>
-    
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
+    <div class="container">
+        <div class="card main-card p-4 p-md-5">
+            
+            <header class="mb-5">
+                <h1 class="display-5 main-title text-uppercase mb-2">
+                    Análisis Estático de Calidad<br>
+                    de Código Automatizado<br>
+                    con GitHub Actions
+                </h1>
+                <p class="subtitle text-uppercase m-0">Integrando SonarQube Cloud</p>
+            </header>
+
+            <div class="row g-4 mb-5">
+                
+                <div class="col-lg-8">
+                    <div class="row g-3">
+                        
+                        <div class="col-md-4">
+                            <div class="step-card p-4 h-100">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="step-number">01.</span>
+                                    <span class="step-badge">Disparador</span>
+                                </div>
+                                <ul class="list-unstyled m-0">
+                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>¿Qué es SonarQube Cloud?</li>
+                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Conectar repositorio</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="step-card p-4 h-100">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="step-number">02.</span>
+                                    <span class="step-badge">Flujo CI/CD</span>
+                                </div>
+                                <ul class="list-unstyled m-0">
+                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Generar token Sonar</li>
+                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Configurar secretos</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="step-card p-4 h-100">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <span class="step-number">03.</span>
+                                    <span class="step-badge">Escaneo</span>
+                                </div>
+                                <ul class="list-unstyled m-0">
+                                    <li class="mb-2 text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Crear YAML Actions</li>
+                                    <li class="text-secondary small"><i class="fa-solid fa-circle-check text-success me-2"></i>Ejecutar análisis</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="kpi-panel p-4 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <h3 class="kpi-title pb-2 mb-3">Resumen Ejecutivo</h3>
+                            
+                            <div class="mb-3">
+                                <span class="kpi-label d-block mb-1">Herramientas Clave</span>
+                                <div class="fw-bold mb-1"><i class="fa-brands fa-github text-info me-2"></i>GitHub Actions</div>
+                                <div class="fw-bold"><i class="fa-solid fa-cloud text-info me-2"></i>SonarQube Cloud</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <span class="kpi-label d-block mb-1">Stack Soportado</span>
+                            <div class="fw-bold"><i class="fa-solid fa-cube text-warning me-2"></i>Maven / Java</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mb-5">
+                <h4 class="h6 text-uppercase fw-bold text-muted mb-3">Flujo del pipeline & Roles de Ingeniería</h4>
+                <div class="pipeline-container p-3">
+                    <div class="row g-2 align-items-center text-center">
+                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-users me-2 text-primary"></i>DevSecOps / DevOps</div></div>
+                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-brands fa-git-alt me-2 text-danger"></i>Git Repo</div></div>
+                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-gears me-2 text-secondary"></i>Maven Build</div></div>
+                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-network-wired me-2 text-success"></i>GH Actions</div></div>
+                        <div class="col-md-auto col-12 text-muted d-none d-md-block"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="col-md col-12"><div class="pipeline-node p-2"><i class="fa-solid fa-square-poll-vertical me-2 text-info"></i>Sonar Report</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <h2 class="h5 fw-bold mb-3 text-dark"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>¿Por qué es importante esta implementación?</h2>
+                <div class="row g-3">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-shield-cat-vampire mb-2 text-primary fs-4"></i>
+                            Seguridad Temprana
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-robot mb-2 text-primary fs-4"></i>
+                            Calidad Automatizada
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-bolt mb-2 text-primary fs-4"></i>
+                            Prácticas CI/CD
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="benefit-card p-3 text-center h-100 d-flex flex-column align-items-center justify-content-center">
+                            <i class="fa-solid fa-building-shield mb-2 text-primary fs-4"></i>
+                            DevSecOps Empresarial
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
     </div>
 
-    <div class="main-workspace">
-        <div class="section-tasks"> 
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>¿Qué es SonarQube Cloud?</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Cómo conectar un repositorio de GitHub a SonarQube Cloud</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Generar token de Sonar</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Configurar secretos de GitHub</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Crear flujo de trabajo YAML para GitHub Actions</span>
-            </div>
-            <div class="task-item" onclick="toggleTask(this)">
-                <input type="checkbox" onchange="updateProgress()">
-                <span>Ejecutar análisis estático automatizado de código</span>
-            </div>
-        </div>
-
-        <div class="mockup-container">
-            <h3>📊 Flujo de Trabajo (Workflow) Completo de Integración Continua (CI)</h3>
-            <img src="assets/dashboard-mockup.png" alt="SonarQube Dashboard Mockup" class="mockup-img">
-        </div>
-    </div>
-
-    <div class="grid">
-        <div class="card">
-            <h2>🎯 Integración fundamental para:</h2>
-            <ul>
-                <li>Ingenieros de DevOps</li>
-                <li>Ingenieros de DevSecOps</li>
-                <li>Ingenieros de la nube</li>
-                <li>Administradores de GitHub Enterprise</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>🛠️ Herramientas utilizadas:</h2>
-            <ul>
-                <li>GitHub / GitHub Actions</li>
-                <li>SonarQube Cloud</li>
-                <li>Maven & Java (App Web)</li>
-                <li>Jetty Server</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card" style="margin-top: 25px;">
-        <h2>🔐 ¿Por qué es importante?</h2>
-        <ul class="security-list">
-            <li>Seguridad desde las primeras etapas del desarrollo (Shift-Left Security)</li>
-            <li>Calidad de código e inspección automatizada</li>
-            <li>Mejores prácticas de arquitectura CI/CD</li>
-            <li>Implementación de DevSecOps a nivel empresarial</li>
-        </ul>
-    </div>
-</div>
-
-<script>
-    function toggleTask(element) {
-        const checkbox = element.querySelector('input[type="checkbox"]');
-        if (event.target !== checkbox) {
-            checkbox.checked = !checkbox.checked;
-            updateProgress();
-        }
-    }
-
-    function updateProgress() {
-        const checkboxes = document.querySelectorAll('.task-item input[type="checkbox"]');
-        const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-        const totalCount = checkboxes.length;
-        
-        const percentage = Math.round((checkedCount / totalCount) * 100);
-        const progressBar = document.getElementById('progressBar');
-        
-        progressBar.style.width = percentage + '%';
-    }
-</script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
